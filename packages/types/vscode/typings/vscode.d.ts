@@ -2976,7 +2976,42 @@ declare module 'vscode' {
      *   without providing an exit code.
      */
     readonly code: number | undefined;
+
+    /**
+		 * The reason that triggered the exit of a terminal.
+		 */
+		readonly reason: TerminalExitReason;
   }
+
+	/**
+	 * Terminal exit reason kind.
+	 */
+	export enum TerminalExitReason {
+		/**
+		 * Unknown reason.
+		 */
+		Unknown = 0,
+
+		/**
+		 * The window closed/reloaded.
+		 */
+		Shutdown = 1,
+
+		/**
+		 * The shell process exited.
+		 */
+		Process = 2,
+
+		/**
+		 * The user closed the terminal.
+		 */
+		User = 3,
+
+		/**
+		 * An extension disposed the terminal.
+		 */
+		Extension = 4,
+	}
 
   export interface Terminal {
 
@@ -3202,6 +3237,39 @@ declare module 'vscode' {
      */
     clear(): void;
   }
+
+  /**
+	 * A collection of mutations that an extension can apply to a process environment. Applies to all scopes.
+	 */
+	export interface GlobalEnvironmentVariableCollection extends EnvironmentVariableCollection {
+		/**
+		 * Gets scope-specific environment variable collection for the extension. This enables alterations to
+		 * terminal environment variables solely within the designated scope, and is applied in addition to (and
+		 * after) the global collection.
+		 *
+		 * Each object obtained through this method is isolated and does not impact objects for other scopes,
+		 * including the global collection.
+		 *
+		 * @param scope The scope to which the environment variable collection applies to.
+		 *
+		 * If a scope parameter is omitted, collection applicable to all relevant scopes for that parameter is
+		 * returned. For instance, if the 'workspaceFolder' parameter is not specified, the collection that applies
+		 * across all workspace folders will be returned.
+		 *
+		 * @returns Environment variable collection for the passed in scope.
+		 */
+		getScoped(scope: EnvironmentVariableScope): EnvironmentVariableCollection;
+	}
+
+	/**
+	 * The scope object to which the environment variable collection applies.
+	 */
+	export interface EnvironmentVariableScope {
+		/**
+		 * Any specific workspace folder to get collection for.
+		 */
+		workspaceFolder?: WorkspaceFolder;
+	}
 
   //#endregion
 

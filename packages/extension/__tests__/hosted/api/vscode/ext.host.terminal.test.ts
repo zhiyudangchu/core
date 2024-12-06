@@ -190,7 +190,7 @@ describe('ext host terminal test', () => {
 
     expect(mockCreateTerminal).toHaveBeenCalled();
 
-    const mockSetStatus = jest.spyOn(terminal4, 'setExitCode');
+    const mockSetStatus = jest.spyOn(terminal4, 'setExitStatus');
 
     // 要等待前台创建完 terminal 示例后，pty 事件绑定完再 fire
     setTimeout(() => {
@@ -245,7 +245,7 @@ describe('ext host terminal test', () => {
   const mockExtension = {
     id: 'test-terminal-env',
   };
-  const collection = extHost.getEnviromentVariableCollection(mockExtension as unknown as IExtension);
+  const collection = extHost.getEnvironmentVariableCollection(mockExtension as unknown as IExtension);
   // @ts-ignore
   const mocksyncEnvironmentVariableCollection = jest.spyOn(extHost, 'syncEnvironmentVariableCollection');
 
